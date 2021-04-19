@@ -1,0 +1,20 @@
+<base href="http://localhost:4000">
+<form action="./Home" method="post" enctype="multipart/form-data">
+    <h2>Danh sách User</h2>
+    <div>-------------------------------------------------------------</div>
+    {{#each users}}
+        <div name="id">{{this._id}}</div>
+        <div>{{this.username}}</div>
+        <div>{{this.password}}</div>
+        <div>{{this.name}}</div>
+        <div>{{this.address}}</div>
+        <div>{{this.number_phone}}</div>
+        <img style="width: 50px" src="uploads/{{this.avatar}}">
+        <a href="/updateUser/{{this._id}}">Upload</a>
+        <a onclick="return confirm('ban muon xoa k')" href="/deleteUsers/{{this._id}}">Delete</a>
+
+        <br>
+        <div>-------------------------------------------------------------</div>
+    {{/each}}
+
+</form>
