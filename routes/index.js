@@ -160,27 +160,7 @@ router.post('/updateUser',function (req,res) {
         }
 
     });
-    router.get('/getUsers', function (req, res) {
-        var connectUsers = db.model('users', user);
-        var baseJson = {
-            errorCode: undefined,
-            errorMessage: undefined,
-            data: undefined
-        }
-        connectUsers.find({}, function (err, users) {
-            if (err) {
-                baseJson.errorCode = 403
-                baseJson.errorMessage = '403 Forbidden'
-                baseJson.data = []
-            } else {
-                baseJson.errorCode = 200
-                baseJson.errorMessage = 'OK'
-                baseJson.data = users
-            }
-            res.send(baseJson);
-        })
 
-    });
 
 /*
     router.post('/update',(req,res) =>{
@@ -234,5 +214,25 @@ router.post('/updateUser',function (req,res) {
             });
     });
 });
+router.get('/getUsers', function (req, res) {
+    var connectUsers = db.model('users', user);
+    var baseJson = {
+        errorCode: undefined,
+        errorMessage: undefined,
+        data: undefined
+    }
+    connectUsers.find({}, function (err, users) {
+        if (err) {
+            baseJson.errorCode = 403
+            baseJson.errorMessage = '403 Forbidden'
+            baseJson.data = []
+        } else {
+            baseJson.errorCode = 200
+            baseJson.errorMessage = 'OK'
+            baseJson.data = users
+        }
+        res.send(baseJson);
+    })
 
+});
 module.exports = router;
