@@ -177,7 +177,7 @@ router.post('/updateUser',function (req,res) {
             console.log("error",err)
         })
     })*/
-    router.post("/users", async (req, res) => {
+    router.post("/usersData", async (req, res) => {
         var userConnect=db.model('users',user);
         const u = new userConnect(req.body);
         try {
