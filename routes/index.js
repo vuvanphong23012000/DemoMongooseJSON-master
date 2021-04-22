@@ -104,7 +104,7 @@ router.get('/deleteUsers/:id',function (req,res) {
         res.redirect('../Home')
 
     });
-})
+});
 
 
 router.get('/updateUser/:id',function (req,res) {
@@ -117,7 +117,7 @@ router.get('/updateUser/:id',function (req,res) {
 
         }
     })
-})
+});
 router.post('/updateUser',function (req,res) {
     var userConnect=db.model('users',user);
     upload(req, res, function (err){
@@ -160,59 +160,42 @@ router.post('/updateUser',function (req,res) {
         }
 
     });
-
-
-/*
-    router.post('/update',(req,res) =>{
-        var userConnect=db.model('users',user);
-        userConnect.updateOne(req.body._id,{
-            userName:req.body.usernameDK,
-            email:req.body.emailDK,
-            sdt:req.body.sdtDK,
-            avatar:req.file.filename,
-        }).then(data =>{
-            console.log(data)
-            res.send(data)
-        }).catch(err => {
-            console.log("error",err)
+});
+router.post("/usersData", async (req, res) => {
+    var userConnect=db.model('users',user);
+    const u = new userConnect(req.body);
+    try {
+        await u.save();
+        res.send(u);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+router.post("/deleteData", (req, res) => {
+    db.model('users',user).findByIdAndRemove(req.body.id)
+        .then((data) => {
+            console.log(data);
+            res.send(data);
         })
-    })*/
-    router.post("/usersData", async (req, res) => {
-        var userConnect=db.model('users',user);
-        const u = new userConnect(req.body);
-        try {
-            await u.save();
-            res.send(u);
-        } catch (error) {
+        .catch((error) => {
             res.status(500).send(error);
-        }
-    });
-    router.post("/deleteData", (req, res) => {
-        db.model('users',user).findByIdAndRemove(req.body.id)
-            .then((data) => {
-                console.log(data);
-                res.send(data);
-            })
-            .catch((error) => {
-                res.status(500).send(error);
-            });
-    });
-    router.post("/updateData", (req, res) => {
-        db.model('users',user).findByIdAndUpdate(req.body.id, {
-            username: req.body.username,
-            password: req.body.password,
-            name: req.body.name,
-            address: req.body.address,
-            number_phone: req.body.number_phone,
+        });
+});
+router.post("/updateData", (req, res) => {
+    db.model('users',user).findByIdAndUpdate(req.body.id, {
+        username: req.body.username,
+        password: req.body.password,
+        name: req.body.name,
+        address: req.body.address,
+        number_phone: req.body.number_phone,
+    })
+        .then((data) => {
+            console.log(data);
+            res.send(data);
         })
-            .then((data) => {
-                console.log(data);
-                res.send(data);
-            })
-            .catch((error) => {
-                res.status(500).send(error);
-            });
-    });
+        .catch((error) => {
+            res.status(500).send(error);
+        });
 });
 router.get('/getUsers', function (req, res) {
     var connectUsers = db.model('users', user);
