@@ -160,9 +160,79 @@ router.post('/updateUser',function (req,res) {
         }
 
     });
+    router.get('/getUsers', function (req, res) {
+        var connectUsers = db.model('users', user);
+        var baseJson = {
+            errorCode: undefined,
+            errorMessage: undefined,
+            data: undefined
+        }
+        connectUsers.find({}, function (err, users) {
+            if (err) {
+                baseJson.errorCode = 403
+                baseJson.errorMessage = '403 Forbidden'
+                baseJson.data = []
+            } else {
+                baseJson.errorCode = 200
+                baseJson.errorMessage = 'OK'
+                baseJson.data = users
+            }
+            res.send(baseJson);
+        })
 
+    });
 
-
-})
+/*
+    router.post('/update',(req,res) =>{
+        var userConnect=db.model('users',user);
+        userConnect.updateOne(req.body._id,{
+            userName:req.body.usernameDK,
+            email:req.body.emailDK,
+            sdt:req.body.sdtDK,
+            avatar:req.file.filename,
+        }).then(data =>{
+            console.log(data)
+            res.send(data)
+        }).catch(err => {
+            console.log("error",err)
+        })
+    })*/
+    router.post("/users", async (req, res) => {
+        var userConnect=db.model('users',user);
+        const u = new userConnect(req.body);
+        try {
+            await u.save();
+            res.send(u);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    });
+    router.post("/deleteData", (req, res) => {
+        db.model('users',user).findByIdAndRemove(req.body.id)
+            .then((data) => {
+                console.log(data);
+                res.send(data);
+            })
+            .catch((error) => {
+                res.status(500).send(error);
+            });
+    });
+    router.post("/updateData", (req, res) => {
+        db.model('users',user).findByIdAndUpdate(req.body.id, {
+            username: req.body.username,
+            password: req.body.password,
+            name: req.body.name,
+            address: req.body.address,
+            number_phone: req.body.number_phone,
+        })
+            .then((data) => {
+                console.log(data);
+                res.send(data);
+            })
+            .catch((error) => {
+                res.status(500).send(error);
+            });
+    });
+});
 
 module.exports = router;
